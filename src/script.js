@@ -23,9 +23,9 @@ const geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 // Materials (skin over object)
 
 const material = new THREE.MeshStandardMaterial();
-material.color = new THREE.Color(0xff0000);
-material.metalness = 0.7;
-material.roughness = 0.75;
+material.color = new THREE.Color(0x14deed);
+material.metalness = 1;
+material.roughness = 0.1;
 material.normalMap = normalTexture;
 
 // Mesh (combination of object and material)
