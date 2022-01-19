@@ -145,6 +145,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 
+//Moves with mouse
 document.addEventListener(`mousemove`, onDocumentMouseMove);
 
 let mouseX = 0;
@@ -161,9 +162,38 @@ function onDocumentMouseMove(event) {
   mouseY = event.clientY - windowY;
 }
 
+//Moves with scroll
+
 const updateSphere = (event) => {
   sphere.position.y = window.scrollY * 0.003;
 };
+
+//Moves with arrow keys
+
+document.addEventListener(`keydown`, ArrowKeys);
+
+function ArrowKeys(input, e) {
+  const key = input.code;
+  switch (key) {
+    case "ArrowLeft":
+      sphere.position.x -= 0.1;
+      e.preventDefault();
+      break;
+    case "ArrowRight":
+      sphere.position.x += 0.1;
+      e.preventDefault();
+      break;
+    case "ArrowDown":
+      sphere.position.y -= 0.1;
+      e.preventDefault();
+      break;
+    case "ArrowUp":
+      sphere.position.y += 0.1;
+      e.preventDefault();
+      break;
+  }
+  console.log(input);
+}
 
 window.addEventListener(`scroll`, updateSphere);
 
