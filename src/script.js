@@ -28,11 +28,13 @@ material.metalness = 5;
 material.roughness = 0.2;
 material.wireframe = false;
 material.normalMap = normalTexture;
+material.opacity = 0.63;
 
 const materialProperties = gui.addFolder("Material");
 
 materialProperties.add(material, "metalness").max(5).min(0).step(0.1);
 materialProperties.add(material, "roughness").max(5).min(0).step(0.1);
+materialProperties.add(material, "opacity").max(1).min(0).step(0.01);
 
 // Mesh (combination of object and material)
 const sphere = new THREE.Mesh(geometry, material);
