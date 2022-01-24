@@ -9,6 +9,8 @@ import { Mesh, MeshStandardMaterial } from "three";
 const textureLoader = new THREE.TextureLoader();
 const mountain = textureLoader.load(`/textures/mountain.jpg`);
 const amogus = textureLoader.load(`/textures/amogus.png`);
+const height = textureLoader.load(`/textures/height.jpg`);
+const alpha = textureLoader.load(`/textures/alpha.jpg`);
 
 // Debug
 const gui = new dat.GUI();
@@ -27,6 +29,10 @@ const geometry = new THREE.PlaneBufferGeometry(3, 3, 64, 64);
 const material = new THREE.MeshStandardMaterial({
   color: "grey",
   map: mountain,
+  displacementMap: height,
+  displacementScale: 0.3,
+  alphaMap: alpha,
+  transparent: true,
 });
 
 const materialGui = gui.addFolder("Material");
@@ -35,25 +41,31 @@ const materialGui = gui.addFolder("Material");
 const plane = new THREE.Mesh(geometry, material);
 scene.add(plane);
 
-plane.rotation.x = 50;
-plane.rotation.y = 20;
+plane.rotation.x = 8.2;
+plane.rotation.y = 3.2;
+plane.position.y = 0;
 
 const meshGui = gui.addFolder("Mesh");
 
-meshGui.add(plane.rotation, "x").min(0).max(360).step(1);
-meshGui.add(plane.rotation, "y").min(0).max(360).step(1);
+meshGui.add(plane.rotation, "x").min(0).max(10).step(0.1);
+meshGui.add(plane.rotation, "y").min(0).max(10).step(0.1);
+meshGui.add(plane.position, "y").min(-10).max(10).step(0.1);
 
 // Lights
 
 //Light 1
 
-const pointLight = new THREE.PointLight(0xca1515, 2);
+const pointLight = new THREE.PointLight(0xca1515, 5);
 pointLight.position.x = 2;
 pointLight.position.y = 3;
 pointLight.position.z = 4;
 scene.add(pointLight);
 
 const light1 = gui.addFolder("Light 1");
+light1.add(pointLight.position, "x").max(10).min(0).step(0.1);
+light1.add(pointLight.position, "y").max(10).min(0).step(0.1);
+light1.add(pointLight.position, "z").max(10).min(0).step(0.1);
+light1.add(pointLight.intensity, "").max(10).min(0).step(0.1);
 
 const light1Color = {
   color: `#227ce2`,
@@ -95,10 +107,17 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
+
 camera.position.x = 0;
-camera.position.y = 0;
-camera.position.z = 5;
+camera.position.y = 1;
+camera.position.z = 4;
 scene.add(camera);
+
+const cameraGUI = gui.addFolder("Camera");
+
+cameraGUI.add(camera.rotation, "x").max(10).min(0).step(0.1);
+cameraGUI.add(camera.rotation, "y").max(10).min(0).step(0.1);
+cameraGUI.add(camera.rotation, "z").max(10).min(0).step(0.1);
 
 // Controls
 // const controls = new OrbitControls(camera, canvas)
@@ -109,7 +128,7 @@ scene.add(camera);
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
-  alpha: true,
+  // alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -167,8 +186,9 @@ function ArrowKeys(input, e) {
 const clock = new THREE.Clock();
 
 const tick = () => {
-  const elapsedTime = clock.getElapsedTime();
+  const elapsedTime = 0.7 * clock.getElapsedTime();
 
+  plane.rotation.z = elapsedTime;
   // Update Orbital Controls
   // controls.update()
 
