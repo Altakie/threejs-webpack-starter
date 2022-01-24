@@ -33,6 +33,7 @@ const material = new THREE.MeshStandardMaterial({
   displacementScale: 0.3,
   alphaMap: alpha,
   transparent: true,
+  depthTest: false,
 });
 
 const materialGui = gui.addFolder("Material");
@@ -55,7 +56,7 @@ meshGui.add(plane.position, "y").min(-10).max(10).step(0.1);
 
 //Light 1
 
-const pointLight = new THREE.PointLight(0xca1515, 5);
+const pointLight = new THREE.PointLight(0xca1515, 6.7);
 pointLight.position.x = 2;
 pointLight.position.y = 3;
 pointLight.position.z = 4;
@@ -65,7 +66,7 @@ const light1 = gui.addFolder("Light 1");
 light1.add(pointLight.position, "x").max(10).min(0).step(0.1);
 light1.add(pointLight.position, "y").max(10).min(0).step(0.1);
 light1.add(pointLight.position, "z").max(10).min(0).step(0.1);
-light1.add(pointLight.intensity, "").max(10).min(0).step(0.1);
+light1.add(pointLight, "intensity").max(10).min(0).step(0.1);
 
 const light1Color = {
   color: `#227ce2`,
@@ -154,7 +155,7 @@ function onDocumentMouseMove(event) {
   mouseY = event.clientY - windowY;
 }
 
-//Moves with scroll
+//Displacement with Mouse move
 
 //Moves with arrow keys
 
