@@ -80,13 +80,13 @@ light1.addColor(light1Color, "color").onChange(() => {
  * Sizes
  */
 const sizes = {
-  width: window.innerWidth,
+  width: window.innerWidth * 0.7,
   height: window.innerHeight,
 };
 
 window.addEventListener("resize", () => {
   // Update sizes
-  sizes.width = window.innerWidth;
+  sizes.width = window.innerWidth * 0.7;
   sizes.height = window.innerHeight;
 
   // Update camera
@@ -129,7 +129,7 @@ cameraGUI.add(camera.rotation, "z").max(10).min(0).step(0.1);
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
-  // alpha: true,
+  alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -156,6 +156,11 @@ function onDocumentMouseMove(event) {
 }
 
 //Displacement with Mouse move
+
+function animateTerrain(event) {
+  mouseY = event.clientY;
+}
+document.addEventListener(`mousemove`, animateTerrain);
 
 //Moves with arrow keys
 
@@ -190,6 +195,8 @@ const tick = () => {
   const elapsedTime = 0.7 * clock.getElapsedTime();
 
   plane.rotation.z = elapsedTime;
+
+  plane.material.displacementScale = 0.002 * mouseY;
   // Update Orbital Controls
   // controls.update()
 
