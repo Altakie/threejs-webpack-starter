@@ -170,6 +170,8 @@ const updateSphere = (event) => {
   sphere.position.y = window.scrollY * 0.003;
 };
 
+window.addEventListener(`scroll`, updateSphere);
+
 //Moves with arrow keys
 
 document.addEventListener(`keydown`, ArrowKeys);
@@ -196,8 +198,6 @@ function ArrowKeys(input, e) {
   }
   console.log(input);
 }
-
-window.addEventListener(`scroll`, updateSphere);
 
 const clock = new THREE.Clock();
 
