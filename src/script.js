@@ -19,29 +19,16 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
-// Objects (geometry/shape)
-const geometry = new THREE.PlaneBufferGeometry(3, 3, 64, 64);
+const geo = new THREE.PlaneBufferGeometry(3, 3, 64, 64);
 
-// Materials (skin over object)
+for (let i = 0; i < 4; i++) {
+  const mat = new THREE.MeshStandardMaterial({
+    map: textureLoader.load(`/textures/${i}.jpg`),
+  });
 
-const material = new THREE.MeshStandardMaterial({
-  color: "grey",
-  map: mountain,
-});
-
-const materialGui = gui.addFolder("Material");
-
-// Mesh (combination of object and material)
-const plane = new THREE.Mesh(geometry, material);
-scene.add(plane);
-
-plane.rotation.x = 50;
-plane.rotation.y = 20;
-
-const meshGui = gui.addFolder("Mesh");
-
-meshGui.add(plane.rotation, "x").min(0).max(360).step(1);
-meshGui.add(plane.rotation, "y").min(0).max(360).step(1);
+  const img = new THREE.Mesh(geo, mat);
+  scene.add(img);
+}
 
 // Lights
 
