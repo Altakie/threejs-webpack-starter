@@ -27,8 +27,17 @@ for (let i = 0; i < 4; i++) {
   });
 
   const img = new THREE.Mesh(geo, mat);
+  img.position.set(Math.random() + 0.3, i * -5);
   scene.add(img);
 }
+
+let objs = [];
+
+scene.traverse((object) => {
+  if (object.isMesh) {
+    objs.push(object);
+  }
+});
 
 // Lights
 
@@ -87,6 +96,12 @@ camera.position.y = 0;
 camera.position.z = 5;
 scene.add(camera);
 
+const camGUI = gui.addFolder("Camera");
+
+camGUI.add(camera.position, "x").min(0).max(10).step(0.1);
+camGUI.add(camera.position, "y").min(-20).max(0).step(0.1);
+camGUI.add(camera.position, "z").min(0).max(30).step(0.1);
+
 // Controls
 // const controls = new OrbitControls(camera, canvas)
 // controls.enableDamping = true
@@ -96,7 +111,7 @@ scene.add(camera);
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
-  alpha: true,
+  // alpha: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -105,56 +120,39 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 
-//Moves with mouse
-document.addEventListener(`mousemove`, onDocumentMouseMove);
+//Moves Camera down with scroll
 
-let mouseX = 0;
-let mouseY = 0;
+window.addEventListener("wheel", camDown);
 
-let targetX = 0;
-let targetY = 0;
-
-const windowX = window.innerWidth / 2;
-const windowY = window.innerHeight / 2;
-
-function onDocumentMouseMove(event) {
-  mouseX = event.clientX - windowX;
-  mouseY = event.clientY - windowY;
+let y = 0;
+let pos = 0;
+function camDown(event) {
+  y = event.deltaY * -0.005;
 }
 
-//Moves with scroll
+const mouse = new THREE.Vector2();
 
-//Moves with arrow keys
+window.addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / sizes.width) * 2 - 1;
+  mouse.y = -(event.clientY / sizes.height) * 2 - 1;
+});
 
-document.addEventListener(`keydown`, ArrowKeys);
-
-function ArrowKeys(input, e) {
-  const key = input.code;
-  switch (key) {
-    case "ArrowLeft":
-      sphere.position.x -= 0.1;
-      e.preventDefault();
-      break;
-    case "ArrowRight":
-      sphere.position.x += 0.1;
-      e.preventDefault();
-      break;
-    case "ArrowDown":
-      sphere.position.y -= 0.1;
-      e.preventDefault();
-      break;
-    case "ArrowUp":
-      sphere.position.y += 0.1;
-      e.preventDefault();
-      break;
-  }
-  console.log(input);
-}
+const raycaster = new THREE.Raycaster();
 
 const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  pos += y;
+
+  camera.position.y = pos;
+  y *= 0.9;
+
+  //Raycaster
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(objs);
 
   // Update Orbital Controls
   // controls.update()
