@@ -154,6 +154,10 @@ const tick = () => {
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(objs);
 
+  for (const intersect of intersects) {
+    console.log(intersects);
+  }
+
   // Update Orbital Controls
   // controls.update()
 
